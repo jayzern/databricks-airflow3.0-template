@@ -1,0 +1,195 @@
+{
+  "datasets": [
+    {
+      "name": "6d487f0e",
+      "displayName": "marts_posts_users",
+      "queryLines": [
+        "SELECT * FROM data_platform_tutorial.default.marts_posts_users"
+      ]
+    },
+    {
+      "name": "431d69e8",
+      "displayName": "marts_top_tags",
+      "queryLines": [
+        "SELECT * FROM data_platform_tutorial.default.marts_top_tags limit 10;"
+      ]
+    },
+    {
+      "name": "cfb1ab02",
+      "displayName": "User Reputation and Average Answer Score Dataset",
+      "queryLines": [
+        "select avg(score) as average_answer_score, Reputation, Id as UserId\n",
+        "from default.marts_posts_users\n",
+        "where PostType=\"Answer\"\n",
+        "group by Id, Reputation"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "9f41c420",
+      "displayName": "posts_users",
+      "layout": [
+        {
+          "widget": {
+            "name": "4225c4ae",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "6d487f0e",
+                  "fields": [
+                    {
+                      "name": "monthly(PostCreationDate)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `PostCreationDate`)"
+                    },
+                    {
+                      "name": "count(PostId)",
+                      "expression": "COUNT(`PostId`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(PostCreationDate)",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "PostCreationDate"
+                },
+                "y": {
+                  "fieldName": "count(PostId)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Count of PostId"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "20c2a0e8",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "431d69e8",
+                  "fields": [
+                    {
+                      "name": "tag_exploded",
+                      "expression": "`tag_exploded`"
+                    },
+                    {
+                      "name": "sum(tags_count)",
+                      "expression": "SUM(`tags_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "tag_exploded",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  },
+                  "displayName": "tag_exploded"
+                },
+                "y": {
+                  "fieldName": "sum(tags_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Sum of tags_count"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "20e1ed90",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "cfb1ab02",
+                  "fields": [
+                    {
+                      "name": "Reputation",
+                      "expression": "`Reputation`"
+                    },
+                    {
+                      "name": "average_answer_score",
+                      "expression": "`average_answer_score`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "scatter",
+              "encodings": {
+                "x": {
+                  "fieldName": "Reputation",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Reputation"
+                },
+                "y": {
+                  "fieldName": "average_answer_score",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "average_answer_score"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 6,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    }
+  }
+}
