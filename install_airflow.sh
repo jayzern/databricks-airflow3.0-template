@@ -19,6 +19,8 @@ kind load docker-image $IMAGE_NAME:$IMAGE_TAG
 
 # Install Airflow using Helm
 kubectl create namespace $NAMESPACE
+kubectl apply -f k8s/secrets/git-secrets.yaml
+
 helm install $RELEASE_NAME apache-airflow/airflow \
     --namespace $NAMESPACE -f chart/values-override.yaml \
     --set-string images.airflow.tag="$IMAGE_TAG" \
