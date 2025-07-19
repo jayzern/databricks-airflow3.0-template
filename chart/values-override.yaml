@@ -1,4 +1,4 @@
-executor: "KubernetesExecutor"
+# executor: "KubernetesExecutor"
 
 images:
   airflow:
