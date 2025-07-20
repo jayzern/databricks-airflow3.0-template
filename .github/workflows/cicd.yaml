@@ -19,6 +19,6 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
       - name: Build and push Docker image
         run: |
-          IMAGE_NAME=my-dags
           IMAGE_TAG=$(date +%Y%m%d%H%M%S)
-          echo $IMAGE_NAME:$IMAGE_TAG
+          docker build --pull --tag ${{ secrets.ECR_URI }}:$IMAGE_TAG -f cicd/Dockerfile .
+          docker push ${{ secrets.ECR_URI }}:$IMAGE_TAG
