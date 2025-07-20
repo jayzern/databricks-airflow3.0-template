@@ -3,3 +3,7 @@ eksctl create cluster --name airflow --region us-east-1 --nodegroup-name standar
 
 # Set up kubectl to use the new EKS cluster
 aws eks --region us-east-1 update-kubeconfig --name airflow
+
+# Create EBS CSI driver add-on
+eksctl create addon --name aws-ebs-csi-driver --cluster airflow
+
