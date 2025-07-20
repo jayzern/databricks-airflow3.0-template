@@ -1,6 +1,6 @@
 # Create or replace a Kind cluster
 kind delete cluster --name kind
-kind create cluster --image kindest/node:v1.29.4
+kind create cluster --image kindest/node:v1.29.4 --config k8s/clusters/kind-cluster.yaml
 
 # Add Airflow to Helm repositories
 helm repo add apache-airflow https://airflow.apache.org
@@ -31,8 +31,12 @@ kubectl create namespace $NAMESPACE
 # Apply Kubernetes configurations
 kubectl apply -f k8s/secrets/git-secrets.yaml
 
+kubectl apply -f k8s/volumes/airflow-logs-pv.yaml
+kubectl apply -f k8s/volumes/airflow-logs-pvc.yaml
+
 helm install $RELEASE_NAME apache-airflow/airflow \
-    --namespace $NAMESPACE -f chart/values-override.yaml \
+    --namespace $NAMESPACE -f chart/values-override-with-persistence.yaml \
+    --set-string images.airflow.repository=$ECR_REGISTRY/$ECR_REPO \
     --set-string images.airflow.tag="$IMAGE_TAG" \
     --debug
 

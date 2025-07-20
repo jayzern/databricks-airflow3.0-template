@@ -2,7 +2,7 @@ from airflow.sdk import DAG
 from airflow.providers.databricks.operators.databricks import (
     DatabricksRunNowOperator
 )
-from post_and_users_asset import posts_asset, users_asset
+from dags.post_and_users_assets import posts_asset, users_asset
 
 with DAG(
     dag_id="trigger_databricks_workflow_dag",
