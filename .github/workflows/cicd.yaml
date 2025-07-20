@@ -20,5 +20,6 @@ jobs:
       - name: Build and push Docker image
         run: |
           IMAGE_TAG=$(date +%Y%m%d%H%M%S)
-          docker build --pull --tag ${{ secrets.ECR_URI }}:$IMAGE_TAG -f cicd/Dockerfile .
-          docker push ${{ secrets.ECR_URI }}:$IMAGE_TAG
+          IMAGE_NAME=my-dags
+          docker build --pull --tag ${{ secrets.ECR_REGISTRY }}/$IMAGE_NAME:$IMAGE_TAG -f cicd/Dockerfile .
+          docker push ${{ secrets.ECR_REGISTRY }}/$IMAGE_NAME:$IMAGE_TAG

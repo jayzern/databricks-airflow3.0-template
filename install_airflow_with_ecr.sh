@@ -8,14 +8,22 @@ helm repo update
 helm show values apache-airflow/airflow > chart/values-example.yaml
 
 # Export values for Airflow docker image
-export IMAGE_NAME=my-dags
-export IMAGE_TAG=$(date +%Y%m%d%H%M%S)
+export REGION=us-east-1
+export ECR_REGISTRY=430197276879.dkr.ecr.us-east-1.amazonaws.com
+export ECR_REPO=my-dags
 export NAMESPACE=airflow
 export RELEASE_NAME=airflow
 
-# Build image and load it into Kind
-docker build --pull --tag $IMAGE_NAME:$IMAGE_TAG -f cicd/Dockerfile .
-kind load docker-image $IMAGE_NAME:$IMAGE_TAG
+# Authenticate with ECR
+aws ecr get-login-password --region $REGION \
+  | docker login --username AWS --password-stdin $ECR_REGISTRY
+
+# Get the latest image tag from ECR
+export IMAGE_TAG=$(aws ecr list-images --repository-name my-dags --region us-east-1 --query 'imageIds[*].imageTag' --output text | tr '\t' '\n' | sort -r | head -n 1)
+
+# Load it into kind
+docker pull $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
+kind load docker-image $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
 
 # Create namespace
 kubectl create namespace $NAMESPACE
