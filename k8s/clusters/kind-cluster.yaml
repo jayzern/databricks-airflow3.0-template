@@ -1,0 +1,9 @@
+apiVersion: kind.x-k8s.io/v1alpha4
+kind: Cluster
+nodes:
+  - role: control-plane
+  - role: worker
+    extraMounts:
+      # Create a mount on my local machine to the container host
+      - hostPath: /Users/jayzern/databricks-airflow3.0-template/tmp/logs
+        containerPath: /mnt/airflow-data/logs
