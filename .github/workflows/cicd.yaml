@@ -1,0 +1,25 @@
+name: Push Airflow Image to ECR
+on:
+  push:
+    branches:
+      - feature/demo
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Configure AWS Creds
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Build and Push Docker Image
+        run: |
+          IMAGE_TAG=$(date +%Y%m%d%H%M%S)
+          IMAGE_NAME=my-dags
+          docker build --pull --tag ${{ secrets.ECR_REGISTRY }}/$IMAGE_NAME:$IMAGE_TAG -f cicd/Dockerfile .
+          docker push ${{ secrets.ECR_REGISTRY }}/$IMAGE_NAME:$IMAGE_TAG
