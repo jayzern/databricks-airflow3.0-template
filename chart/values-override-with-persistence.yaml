@@ -26,3 +26,12 @@ dags:
     # should be "" if dags are at repo root
     subPath: "dags"
     credentialsSecret: git-credentials
+
+logs:
+  persistence:
+    # Enable persistent volume for storing logs
+    enabled: true
+    # If using a custom storageClass, pass name here
+    storageClassName: manual
+    ## the name of an existing PVC to use
+    existingClaim: airflow-logs-pvc

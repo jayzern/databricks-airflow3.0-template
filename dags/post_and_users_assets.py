@@ -11,7 +11,7 @@ users_asset = Asset("s3://data-platform-tutorial/raw/Users.xml")
 
 
 @asset.multi(schedule="@daily", outlets=[posts_asset, users_asset])
-def posts_and_users():
+def produce_data_assets():
     key = "ai.meta.stackexchange.com"
     url = f"https://archive.org/download/stackexchange/{key}.7z"
     output_path = f"/tmp/{key}.7z"
