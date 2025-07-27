@@ -1,4 +1,4 @@
-# Databricks and Airflow 3.0 Template
+# Databricks and airflow 3.0 template
 
 Supporting notes for Youtube tutorial: https://youtu.be/92X54U6gm0Y
 
@@ -80,6 +80,6 @@ To enable CI/CD using github actions, set these two secret environment variables
 
 ## Disclaimer
 
-Not production ready code - gives the reader a rough idea on how to deploy your own cluster.
+Not production ready code - gives the reader a rough idea on how to deploy your own data platform.
 
 Recommended to add more production ready features, such as running this on AWS EKS (Elastic Kubernetes Service), using S3 Remote for logging, replacing Airflow's Postgres instance with own Postgres server, keeping secrets in something like Vault or secrets manager and much more.
